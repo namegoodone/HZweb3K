@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>识字大师 - 纵向穿透与成就追踪版</title>
+    <title>识字大师 - 成就追踪最终版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --font-hanzi: "KaiTi", "楷体", serif; }
@@ -14,39 +14,39 @@
         .card-face { backface-visibility: hidden; position: absolute; width: 100%; height: 100%; }
         .card-back { transform: rotateY(180deg); }
         .btn-active:active { transform: scale(0.95); }
-
+        
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-runnable-track { background: #e2e8f0; height: 10px; border-radius: 5px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 26px; width: 26px; background: #4f46e5; border-radius: 50%; margin-top: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-        /* 日历专属样式 */
+        /* 日历样式 */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-        .day-cell {
-            min-height: 75px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 6px 2px;
-            border-radius: 1.2rem;
-            background: #ffffff;
+        .day-cell { 
+            min-height: 75px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 6px 2px; 
+            border-radius: 1.2rem; 
+            background: #ffffff; 
             border: 1px solid #f1f5f9;
             transition: all 0.3s;
         }
         .today-mark { border: 2px solid #6366f1; background: #f5f7ff; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1); }
-        .bars-wrapper {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            gap: 3px;
-            width: 100%;
-            height: 38px;
+        .bars-wrapper { 
+            display: flex; 
+            align-items: flex-end; 
+            justify-content: space-around; 
+            gap: 3px; 
+            width: 100%; 
+            height: 38px; 
             margin-top: auto;
         }
         .bar-group { display: flex; flex-direction: column; align-items: center; flex: 1; }
         .bar-num { font-size: 8px; font-weight: 900; margin-bottom: 1px; }
         .num-new { color: #059669; }
         .num-rev { color: #d97706; }
-        .bar-pill { width: 7px; border-radius: 4px; min-height: 2px; transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .bar-pill { width: 7px; border-radius: 4px; transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .bar-new { background: linear-gradient(to top, #10b981, #34d399); }
         .bar-rev { background: linear-gradient(to top, #f59e0b, #fbbf24); }
     </style>
@@ -54,7 +54,7 @@
 <body class="p-4 flex flex-col items-center">
 
     <div id="app" class="w-full max-w-md pb-12">
-
+        
         <div id="stats-dashboard" class="bg-slate-900 text-white p-6 rounded-[2.8rem] mb-6 shadow-2xl">
             <h3 id="stats-title" class="text-center text-[10px] font-bold text-slate-500 mb-4 tracking-widest uppercase">全库纵向统计</h3>
             <div class="grid grid-cols-4 gap-2 text-center">
@@ -74,20 +74,17 @@
                 <div class="bg-white/20 p-3 rounded-full text-xl">🚀</div>
             </button>
             <div id="level-list" class="grid grid-cols-1 gap-3"></div>
-
-            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200 mt-4 text-center">
-                <p class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">单组目标数量</p>
-                <div class="text-5xl font-black text-indigo-600 mb-2" id="limit-display">20</div>
-                <input type="range" min="5" max="50" step="1" id="daily-slider" oninput="updateLimitUI(this.value)">
-            </div>
-
+            
             <div class="bg-white p-6 rounded-[3rem] shadow-sm border border-slate-100 mt-6">
                 <div class="flex justify-between items-center mb-6">
-                    <button onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 btn-active">❮</button>
-                    <h4 id="calendar-month" class="font-black text-slate-800 text-lg">2024年 5月</h4>
-                    <button onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 btn-active">❯</button>
+                    <button onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 btn-active text-lg">❮</button>
+                    <div class="flex items-center gap-3">
+                        <h4 id="calendar-month" class="font-black text-slate-800 text-lg">2024年 5月</h4>
+                        <button onclick="goToday()" class="w-7 h-7 bg-indigo-100 text-indigo-600 rounded-full text-[10px] font-black btn-active">今</button>
+                    </div>
+                    <button onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 btn-active text-lg">❯</button>
                 </div>
-                <div class="calendar-grid text-[10px] font-black text-slate-300 mb-3 text-center uppercase tracking-widest">
+                <div class="calendar-grid text-[10px] font-black text-slate-300 mb-3 text-center uppercase">
                     <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
                 </div>
                 <div id="calendar-body" class="calendar-grid"></div>
@@ -95,6 +92,12 @@
                     <div class="flex items-center gap-2"><span class="w-3 h-3 bg-emerald-500 rounded-full"></span> 新学</div>
                     <div class="flex items-center gap-2"><span class="w-3 h-3 bg-amber-500 rounded-full"></span> 复习</div>
                 </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200 mt-4 text-center">
+                <p class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">单组目标数量</p>
+                <div class="text-5xl font-black text-indigo-600 mb-2" id="limit-display">20</div>
+                <input type="range" min="5" max="50" step="1" id="daily-slider" oninput="updateLimitUI(this.value)">
             </div>
         </div>
 
@@ -152,8 +155,8 @@
         let allData = {};
         let activeLv = "";
         let currentWord = null;
-        let db = JSON.parse(localStorage.getItem('shizi_v33_final')) || {};
-        let trackData = JSON.parse(localStorage.getItem('shizi_track_final')) || {};
+        let db = JSON.parse(localStorage.getItem('shizi_v34_db')) || {};
+        let trackData = JSON.parse(localStorage.getItem('shizi_track_v34')) || {};
         let dailyLimit = parseInt(localStorage.getItem('shizi_limit')) || 20;
         let sessionFinishedCount = 0;
         let recentHistory = [];
@@ -169,43 +172,49 @@
                 updateUIStats();
                 renderMenu();
                 renderCalendar();
-            } catch (e) { alert("请确保同目录下存在 data.json"); }
+            } catch (e) { alert("数据加载失败"); }
         }
 
         // --- 追踪与日历逻辑 ---
+        function getTodayStr() {
+            const n = new Date();
+            return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+        }
+
         function recordTrack(type) {
-            const now = new Date();
-            const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-            if (!trackData[dateStr]) trackData[dateStr] = { new: 0, rev: 0 };
-            trackData[dateStr][type]++;
-            localStorage.setItem('shizi_track_final', JSON.stringify(trackData));
+            const d = getTodayStr();
+            if (!trackData[d]) trackData[d] = { new: 0, rev: 0 };
+            trackData[d][type]++;
+            localStorage.setItem('shizi_track_v34', JSON.stringify(trackData));
         }
 
         function renderCalendar() {
             const container = document.getElementById('calendar-body');
             const monthLabel = document.getElementById('calendar-month');
             container.innerHTML = "";
-            const year = viewDate.getFullYear();
-            const month = viewDate.getMonth();
-            monthLabel.innerText = `${year}年 ${month + 1}月`;
+            const y = viewDate.getFullYear();
+            const m = viewDate.getMonth();
+            monthLabel.innerText = `${y}年 ${m + 1}月`;
 
-            const firstDay = new Date(year, month, 1).getDay();
-            const lastDate = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
-            const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+            const firstDay = new Date(y, m, 1).getDay();
+            const lastDate = new Date(y, m + 1, 0).getDate();
+            const todayStr = getTodayStr();
 
             for (let i = 0; i < firstDay; i++) container.innerHTML += `<div class="day-cell border-none bg-transparent"></div>`;
 
             for (let d = 1; d <= lastDate; d++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const dateStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                 const data = trackData[dateStr] || { new: 0, rev: 0 };
                 const isToday = dateStr === todayStr;
-                const hNew = Math.min(data.new * 1.5, 30);
-                const hRev = Math.min(data.rev * 1.5, 30);
+                const hasData = data.new > 0 || data.rev > 0;
 
-                container.innerHTML += `
-                    <div class="day-cell ${isToday ? 'today-mark' : ''}">
-                        <span class="text-[10px] font-black ${isToday ? 'text-indigo-600' : 'text-slate-400'}">${d}</span>
+                let content = `<span class="text-[10px] font-black ${isToday ? 'text-indigo-600' : 'text-slate-400'}">${d}</span>`;
+                
+                // 只有有数据时才显示柱状图
+                if (hasData) {
+                    const hNew = Math.max(2, Math.min(data.new * 1.5, 30)); 
+                    const hRev = Math.max(2, Math.min(data.rev * 1.5, 30));
+                    content += `
                         <div class="bars-wrapper">
                             <div class="bar-group">
                                 ${data.new > 0 ? `<span class="bar-num num-new">${data.new}</span>` : ''}
@@ -216,17 +225,22 @@
                                 <div class="bar-pill bar-rev" style="height: ${hRev}px"></div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    content += `<div class="bars-wrapper opacity-0"></div>`; // 留空占位
+                }
+
+                container.innerHTML += `<div class="day-cell ${isToday ? 'today-mark' : ''}">${content}</div>`;
             }
         }
 
         function changeMonth(step) { viewDate.setMonth(viewDate.getMonth() + step); renderCalendar(); }
+        function goToday() { viewDate = new Date(); renderCalendar(); }
 
-        // --- 学习逻辑 ---
+        // --- 核心学习与状态逻辑 ---
         function updateUIStats() {
             let stats = { mose: 0, mohu: 0, jide: 0, master: 0 };
-            let scopeChars = (activeLv && activeLv !== 'CROSS_LEVEL') ?
+            let scopeChars = (activeLv && activeLv !== 'CROSS_LEVEL') ? 
                 allData[activeLv].map(w => w.char) : Object.values(allData).flat().map(w => w.char);
 
             scopeChars.forEach(char => {
@@ -242,7 +256,7 @@
             document.getElementById('s-mohu').innerText = stats.mohu;
             document.getElementById('s-jide').innerText = stats.jide;
             document.getElementById('s-total').innerText = stats.master;
-            document.getElementById('stats-title').innerText = (activeLv && activeLv !== 'CROSS_LEVEL') ? activeLv+" 统计" : "全库纵向统计";
+            document.getElementById('stats-title').innerText = (activeLv && activeLv !== 'CROSS_LEVEL') ? activeLv+" 当前层统计" : "全库纵向统计";
             return stats;
         }
 
@@ -273,12 +287,12 @@
             updateUIStats();
             document.getElementById('session-count').innerText = sessionFinishedCount;
             document.getElementById('session-bar').style.width = (sessionFinishedCount/dailyLimit*100) + "%";
-            if (sessionFinishedCount >= dailyLimit) {
-                document.getElementById('congrats-modal').classList.remove('hidden');
-                renderCalendar();
-                return;
+            if (sessionFinishedCount >= dailyLimit) { 
+                document.getElementById('congrats-modal').classList.remove('hidden'); 
+                renderCalendar(); 
+                return; 
             }
-
+            
             const now = Date.now();
             let pool = [];
             let allGlobalUnf = Object.keys(db).filter(char => db[char].level < 2);
@@ -296,7 +310,7 @@
                     if (allGlobalUnf.length === 0) { isClearingDebt = false; loadNext(); return; }
                 } else {
                     if (allGlobalUnf.length >= meltLimit) {
-                        document.getElementById('mode-tip').innerText = "🔥 阶段 3：纵向熔断复习";
+                        document.getElementById('mode-tip').innerText = "🔥 阶段 3：全库熔断复习";
                         pool = allGlobalUnf;
                     } else {
                         document.getElementById('mode-tip').innerText = "✨ 阶段 2：全库随机拉新";
@@ -349,9 +363,9 @@
             } else {
                 r.level = (score === 3) ? 1 : 0;
             }
-
+            
             r.next = Date.now() + ([0.2, 1, 720, 1440, 4320, 21600][r.level] * 60 * 1000);
-            localStorage.setItem('shizi_v33_final', JSON.stringify(db));
+            localStorage.setItem('shizi_v34_db', JSON.stringify(db));
             document.getElementById('card-inner').style.opacity = "0";
             setTimeout(() => { loadNext(); document.getElementById('card-inner').style.opacity = "1"; }, 300);
         }
